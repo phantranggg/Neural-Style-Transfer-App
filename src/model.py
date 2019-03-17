@@ -168,15 +168,26 @@ tf.reset_default_graph()
 # Start interactive session
 sess = tf.InteractiveSession()
 
+<<<<<<< HEAD
 content_image = imageio.imread("uploads/cat500x500.jpg")
 content_image = reshape_and_normalize_image(content_image)
 
 style_image = imageio.imread("uploads/style500x500.jpg")
+=======
+content_image = imageio.imread("uploads/cat400x300.jpg")
+content_image = reshape_and_normalize_image(content_image)
+
+style_image = imageio.imread("uploads/style400x300.jpg")
+>>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c
 style_image = reshape_and_normalize_image(style_image)
 
 generated_image = generate_noise_image(content_image)
 
+<<<<<<< HEAD
 model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
+=======
+model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
+>>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c
 
 # Assign the content image to be the input of the VGG model.
 sess.run(model['input'].assign(content_image))
@@ -209,4 +220,8 @@ optimizer = tf.train.AdamOptimizer(2.0)
 # define train_step (1 line)
 train_step = optimizer.minimize(J)
 
+<<<<<<< HEAD
 model_nn(sess, generated_image, num_iterations=200)
+=======
+model_nn(sess, generated_image, num_iterations=100)
+>>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c
