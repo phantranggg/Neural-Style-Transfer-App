@@ -1,29 +1,22 @@
 ### Part of this code is due to the MatConvNet team and is used to load the parameters of the pretrained VGG19 model in the notebook ###
 
-import os
-import sys
 import scipy.io
 import scipy.misc
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
-from PIL import Image
-from nst_utils import *
-
 import numpy as np
 import tensorflow as tf
 
 class CONFIG:
-    IMAGE_WIDTH = 400
-    IMAGE_HEIGHT = 300
+    # IMAGE_WIDTH = 400
+    # IMAGE_HEIGHT = 300
     COLOR_CHANNELS = 3
     NOISE_RATIO = 0.6
     MEANS = np.array([123.68, 116.779, 103.939]).reshape((1,1,1,3)) 
     VGG_MODEL = 'pretrained-model/imagenet-vgg-verydeep-19.mat' # Pick the VGG 19-layer model by from the paper "Very Deep Convolutional Networks for Large-Scale Image Recognition".
     STYLE_IMAGE = 'images/stone_style.jpg' # Style image to use.
-    CONTENT_IMAGE = 'images/content300.jpg' # Content image to use.
-    OUTPUT_DIR = 'output/'
+    # CONTENT_IMAGE = 'images/content300.jpg' # Content image to use.
+    # OUTPUT_DIR = 'output/'
     
-def load_vgg_model(path):
+def load_vgg_model(path, input_image):
     """
     Returns a model for the purpose of 'painting' the picture.
     Takes only the convolution layer weights and wrap using the TensorFlow
@@ -125,7 +118,7 @@ def load_vgg_model(path):
 
     # Constructs the graph model.
     graph = {}
-    graph['input']   = tf.Variable(np.zeros((1, CONFIG.IMAGE_HEIGHT, CONFIG.IMAGE_WIDTH, CONFIG.COLOR_CHANNELS)), dtype = 'float32')
+    graph['input']   = tf.Variable(np.zeros((1, input_image.shape[1], input_image.shape[2], CONFIG.COLOR_CHANNELS)), dtype = 'float32')
     graph['conv1_1']  = _conv2d_relu(graph['input'], 0, 'conv1_1')
     graph['conv1_2']  = _conv2d_relu(graph['conv1_1'], 2, 'conv1_2')
     graph['avgpool1'] = _avgpool(graph['conv1_2'])
@@ -156,7 +149,7 @@ def generate_noise_image(content_image, noise_ratio = CONFIG.NOISE_RATIO):
     """
     
     # Generate a random noise_image
-    noise_image = np.random.uniform(-20, 20, (1, CONFIG.IMAGE_HEIGHT, CONFIG.IMAGE_WIDTH, CONFIG.COLOR_CHANNELS)).astype('float32')
+    noise_image = np.random.uniform(-20, 20, (1, content_image.shape[1], content_image.shape[2], CONFIG.COLOR_CHANNELS)).astype('float32')
     
     # Set the input_image to be a weighted average of the content_image and a noise_image
     input_image = noise_image * noise_ratio + content_image * (1 - noise_ratio)
