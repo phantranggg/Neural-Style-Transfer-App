@@ -1,29 +1,44 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sightengine demo - Python and Flask</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/app.css') }}">
+    <title>Change image on select new image from file input</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 </head>
-
 <body>
-<header class="navbar">
     <form action="/upload" method="post" enctype="multipart/form-data">
-      <span class="btn btn-default btn-file">
-        Your image <input type="file" name="image">
-      </span>
-
+        <span class="btn btn-default btn-file">
+            Your image <input type="file" name="image" id="profile-img">
+            <img id="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
+        </span>
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
-      <span class="btn btn-default btn-file">
-        Your style <input type="file" name="image">
-      </span>
-
-        <input type="submit" value="Upload your style" class="btn btn-primary">
+        <span class="btn btn-default btn-file">
+            Your style <input type="file" name="image" id="profile-img">
+            <img id="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
+        </span>
+        <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
-</header>
+    <div>
+        Your new image
+        <img id="profile-img-tag" src="{{url_for('static', filename='output/generated_image.jpg')}}" width="200px" />
+    </div>
 
+
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profile-img-tag').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#profile-img").change(function(){
+        readURL(this);
+    });
+</script>
 </body>
 </html>
