@@ -132,6 +132,8 @@ def total_cost(J_content, J_style, alpha=10, beta=40):
     return J
 
 def model_nn(sess, input_image, num_iterations=10):
+    PATH = "static/output/"
+
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())
 
@@ -155,10 +157,10 @@ def model_nn(sess, input_image, num_iterations=10):
             print("style cost = " + str(Js))
 
             # save current generated image in the "/output" directory
-            save_image("output/" + str(i) + ".png", generated_image)
+            save_image(PATH + str(i) + ".png", generated_image)
 
     # save last generated image
-    save_image('output/generated_image.jpg', generated_image)
+    save_image(PATH + 'generated_image.jpg', generated_image)
 
     return generated_image
 
@@ -168,26 +170,15 @@ tf.reset_default_graph()
 # Start interactive session
 sess = tf.InteractiveSession()
 
-<<<<<<< HEAD
-content_image = imageio.imread("uploads/cat500x500.jpg")
+content_image = imageio.imread("static/uploads/cat500x500.jpg")
 content_image = reshape_and_normalize_image(content_image)
 
-style_image = imageio.imread("uploads/style500x500.jpg")
-=======
-content_image = imageio.imread("uploads/cat400x300.jpg")
-content_image = reshape_and_normalize_image(content_image)
-
-style_image = imageio.imread("uploads/style400x300.jpg")
->>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c
+style_image = imageio.imread("static/uploads/style500x500.jpg")
 style_image = reshape_and_normalize_image(style_image)
 
 generated_image = generate_noise_image(content_image)
 
-<<<<<<< HEAD
 model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
-=======
-model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
->>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c
 
 # Assign the content image to be the input of the VGG model.
 sess.run(model['input'].assign(content_image))
@@ -212,6 +203,7 @@ sess.run(model['input'].assign(style_image))
 # Compute the style cost
 J_style = compute_style_cost(model, STYLE_LAYERS)
 
+# Compute the total cost
 J = total_cost(J_content, J_style)
 
 # define optimizer (1 line)
@@ -220,8 +212,4 @@ optimizer = tf.train.AdamOptimizer(2.0)
 # define train_step (1 line)
 train_step = optimizer.minimize(J)
 
-<<<<<<< HEAD
-model_nn(sess, generated_image, num_iterations=200)
-=======
 model_nn(sess, generated_image, num_iterations=100)
->>>>>>> 8fa3953774b5aa640c97becca4f08e0e54bf849c

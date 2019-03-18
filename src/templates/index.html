@@ -2,26 +2,27 @@
 <head>
     <title>Change image on select new image from file input</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
 </head>
 <body>
     <form action="/upload" method="post" enctype="multipart/form-data">
         <span class="btn btn-default btn-file">
-            Your image <input type="file" name="image" id="profile-img">
-            <img id="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
+            Your image <input type="file" name="content-image" class="profile-img">
+            <img class="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
         </span>
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
         <span class="btn btn-default btn-file">
-            Your style <input type="file" name="image" id="profile-img">
-            <img id="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
+            Your style <input type="file" name="style-image" class="profile-img">
+            <img class="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
         </span>
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
     <div>
-        Your new image
-        <img id="profile-img-tag" src="{{url_for('static', filename='output/generated_image.jpg')}}" width="200px" />
+        Find your new image <button id="generate-img"></button>
+        <img id="result" src="{{url_for('static', filename='output/generated_image.jpg')}}" width="200px" />
     </div>
 
 
@@ -31,13 +32,50 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#profile-img-tag').attr('src', e.target.result);
+                console.log(input.nextSibling);
+                $('.profile-img-tag').attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
-    $("#profile-img").change(function(){
+    $(".profile-img").change(function(){
         readURL(this);
+    });
+
+    $(function() {
+        $('#generate-img').bind('click', function() {
+            $.getJSON($SCRIPT_ROOT + '/generate_image', {
+                content: $('input[name="content-image"]').val(),
+                style: $('input[name="style-image"]').val()
+            }, function(data) {
+                $("#result").show();
+            });
+            return false;
+        });
+     });
+
+    $("#generate-img").click(function(){
+
+        var fd = new FormData();
+        var content = $('.profile-img')[0].files[0];
+        fd.append('file',files);
+        var style = $('.profile-img')[1].files[0];
+
+        $.ajax({
+            url: 'upload.php',
+            type: 'post',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                if(response != 0){
+                    $("#img").attr("src",response);
+                    $(".preview img").show(); // Display image element
+                }else{
+                    alert('file not uploaded');
+                }
+            },
+        });
     });
 </script>
 </body>
