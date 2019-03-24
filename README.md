@@ -2,7 +2,9 @@
 
 This is a webapp using neural style transfer model.
 
-User will upload 2 images (a content image and a style image), then wait for a new style image which is generated from input images.
+To use this app, you need to upload 2 images, one is content image and other is style image.
+
+It will take a while to create a new image which is combined of input images.
 
 ## Installation
 
