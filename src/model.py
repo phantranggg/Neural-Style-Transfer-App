@@ -160,7 +160,7 @@ def model_nn(sess, input_image, num_iterations=10):
             save_image(PATH + str(i) + ".png", generated_image)
 
     # save last generated image
-    save_image(PATH + 'generated_image.jpg', generated_image)
+    save_image(PATH + "generated_image.jpg", generated_image)
 
     return generated_image
 
@@ -174,6 +174,7 @@ content_image = imageio.imread("static/uploads/cat500x500.jpg")
 content_image = reshape_and_normalize_image(content_image)
 
 style_image = imageio.imread("static/uploads/style500x500.jpg")
+
 style_image = reshape_and_normalize_image(style_image)
 
 generated_image = generate_noise_image(content_image)

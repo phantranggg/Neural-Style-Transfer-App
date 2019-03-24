@@ -5,10 +5,10 @@
     <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
 </head>
 <body>
-    <form action="/upload" method="post" enctype="multipart/form-data">
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
         <span class="btn btn-default btn-file">
-            Your image <input type="file" name="content-image" class="profile-img">
-            <img class="profile-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
+            Your image <input type="file" name="image" id="content-img">
+            <img id="content-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
         </span>
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
@@ -24,7 +24,6 @@
         Find your new image <button id="generate-img"></button>
         <img id="result" src="{{url_for('static', filename='output/generated_image.jpg')}}" width="200px" />
     </div>
-
 
 <script type="text/javascript">
     function readURL(input) {
@@ -78,5 +77,6 @@
         });
     });
 </script>
+<script src="{{ url_for('static', filename='display.js') }}"></script>
 </body>
 </html>
