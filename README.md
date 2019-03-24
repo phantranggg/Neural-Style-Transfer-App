@@ -16,7 +16,7 @@ source venv/bin/activate
 Install dependencies
 
 ```bash
-pip freeze > requirements.txt
+pip install -r requirements.txt
 ```
 
 Show dependencies
@@ -38,8 +38,3 @@ When you are done working in the virtual environment for the moment, you can dea
 ```bash
 deactivate
 ```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
