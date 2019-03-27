@@ -27,7 +27,20 @@ Show dependencies
 pip list
 ```
 
-## Run
+
+Download pretrained model
+
+Save it in src/pretrained-model/imagenet-vg-g-verydeep-19.mat
+https://drive.google.com/file/d/1XQ2pTh7heTevGnUNkgeq5PxEGFfD1wPr/view?usp=sharing
+
+
+## Run model
+
+```bash
+python src/model.py
+```
+
+## Run flask app
 
 ```bash
 python src/upload.py
