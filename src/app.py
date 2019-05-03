@@ -1,6 +1,6 @@
-import Tkinter as tk
+import tkinter as tk
 from PIL import Image, ImageTk
-import tkFileDialog as tkfd
+from tkinter import filedialog as tkfd
 import os
 
 root = tk.Tk()
@@ -28,7 +28,7 @@ class Block:
 			img = img.resize((300,300),Image.ANTIALIAS)
 			self.img = ImageTk.PhotoImage(img)
 			self.label.configure(image=self.img)
-		except Exception, e:
+		except (Exception, e):
 			print(str(e))
 			pass
 
