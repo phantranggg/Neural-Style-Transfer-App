@@ -3,6 +3,12 @@ import tensorflow as tf
 from nst_utils import *
 from tensorflow.python.framework import ops
 
+# Reset the graph
+ops.reset_default_graph()
+
+# Start interactive session
+sess = tf.Session()
+
 def compute_content_cost(a_C, a_G):
     """
     Computes the content cost
@@ -166,12 +172,8 @@ def model_nn(sess, input_image, num_iterations=10):
     return generated_image
 
 
+def run_model():
 
-# Reset the graph
-ops.reset_default_graph()
-
-# Start interactive session
-with tf.Session() as sess:
     content_image = imageio.imread("src/static/uploads/cat400x300.jpg")
     content_image = reshape_and_normalize_image(content_image)
 
@@ -214,4 +216,37 @@ with tf.Session() as sess:
     # define train_step (1 line)
     train_step = optimizer.minimize(J)
 
-    model_nn(sess, generated_image, num_iterations=50)
+    # model_nn(sess, generated_image, num_iterations=50)
+
+    PATH = "src/static/output/"
+    NUM_ITERATIONS = 50
+
+    # Initialize global variables (you need to run the session on the initializer)
+    sess.run(tf.global_variables_initializer())
+
+    # Run the noisy input image (initial generated image) through the model. Use assign().
+    sess.run(model['input'].assign(generated_image))
+
+    for i in range(NUM_ITERATIONS):
+
+        # Run the session on the train_step to minimize the total cost
+        _ = sess.run(train_step)
+
+        # Compute the generated image by running the session on the current model['input']
+        generated_image = sess.run(model['input'])
+
+        # Print every 20 iteration.
+        if i % 20 == 0:
+            Jt, Jc, Js = sess.run([J, J_content, J_style])
+            print("Iteration " + str(i) + " :")
+            print("total cost = " + str(Jt))
+            print("content cost = " + str(Jc))
+            print("style cost = " + str(Js))
+
+            # save current generated image in the "/output" directory
+            save_image(PATH + str(i) + ".png", generated_image)
+
+    # save last generated image
+    save_image(PATH + "generated_image.jpg", generated_image)
+
+# run_model()
