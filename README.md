@@ -37,13 +37,13 @@ https://drive.google.com/file/d/1XQ2pTh7heTevGnUNkgeq5PxEGFfD1wPr/view?usp=shari
 ## Run model
 
 ```bash
-python src/model.py
+python3 src/model.py
 ```
 
 ## Run flask app
 
 ```bash
-python src/upload.py
+python3 src/upload.py
 ```
 
 ## Deactivate
