@@ -10,72 +10,87 @@ body {
 }
 
 h1 {
-    font-size: 20px;
-    text-align: center;
-    margin: 20px 0 20px;
-    small {
-        display: block;
-        font-size: 15px;
-        padding-top: 8px;
-        color: gray;
-    }
+    font-family: inherit;
+    font-size: 41px;
+    font-weight: 300;
+    text-transform: uppercase;
+    margin: 20px 0;
 }
 
-.avatar-upload {
+.margin-top-50 {
+    margin-top: 50px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.uploader {
+  position: relative;
+  text-align: center;
+  padding: 1em 0;
+  margin: 1em 0;
+  color: #555;
+  border: 2px dashed #888;
+  border-radius: 7px;
+  cursor: default;
+  background: white;
+}
+
+.uploader p.uploader-msg {
+    font-family: inherit;
+    font-size: 16px;
+    margin: 2em 0px;
+}
+
+.img-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  left: 0;
+  right: 0;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+#popular-style {
+    height: 136px;
+    overflow-x: auto;
+    background: white;
+    margin: 1em 0;
+    color: #555;
+    border-radius: 7px;
+}
+
+#popular-style .style-img {
     position: relative;
-    max-width: 205px;
-    margin: 50px auto;
-    .avatar-edit {
-        position: absolute;
-        right: 12px;
-        z-index: 1;
-        top: 10px;
-        input {
-            display: none;
-            + label {
-                display: inline-block;
-                width: 34px;
-                height: 34px;
-                margin-bottom: 0;
-                border-radius: 100%;
-                background: #FFFFFF;
-                border: 1px solid transparent;
-                box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
-                cursor: pointer;
-                font-weight: normal;
-                transition: all .2s ease-in-out;
-                &:hover {
-                    background: #f1f1f1;
-                    border-color: #d6d6d6;
-                }
-                &:after {
-                    content: "\f040";
-                    font-family: 'FontAwesome';
-                    color: #757575;
-                    position: absolute;
-                    top: 10px;
-                    left: 0;
-                    right: 0;
-                    text-align: center;
-                    margin: auto;
-                }
-            }
-        }
-    }
-    .avatar-preview {
-        width: 192px;
-        height: 192px;
-        position: relative;
-        border-radius: 100%;
-        border: 6px solid #F8F8F8;
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-        > div {
-            width: 100%;
-            height: 100%;
-            border-radius: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-    }
+}
+
+#popular-style .style-img > img,
+#popular-style .style-img .overlay {
+    height: 100px;
+    margin: 18px 10px;
+    cursor: pointer;
+}
+
+#popular-style .style-img .overlay {
+    display: none;
+    width: 100px !important;
+    background: rgba(200,200,200,0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#popular-style .style-img .overlay img {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    height: auto;
+}
+
+.d-inline-block {
+    display: inline-block;
 }

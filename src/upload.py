@@ -1,10 +1,14 @@
+#!/usr/bin/env python3
+
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
+import model
+import time
 
 app = Flask(__name__)
 
-# UPLOAD_FOLDER = os.path.basename('static/uploads')
-UPLOAD_FOLDER = os.getcwd() + '/static/uploads'
+SRC_FOLDER = os.getcwd() + '/src/'
+UPLOAD_FOLDER = os.getcwd() + '/src/static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
@@ -13,12 +17,27 @@ def hello_world():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    file = request.files['image']
-    f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    content = request.files['content_img']
+    cf = os.path.join(app.config['UPLOAD_FOLDER'], str(time.time()) + '_' + content.filename)
+    content.save(cf)
+    content.close()
 
-    # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
-    file.save(f)
-    return render_template('index.html')
+    isUploadStyle = request.form.get('is_upload_style')
+    if isUploadStyle == 'true':
+        style = request.files['style_img']
+        sf = os.path.join(app.config['UPLOAD_FOLDER'], str(time.time()) + '_' + style.filename)
+        style.save(sf)
+        style.close()
+    else:
+        sf = SRC_FOLDER + request.form.get('style')
+
+    model.initSession()
+    rs = model.run_model(cf, sf)
+
+    return Response(
+        rs,
+        mimetype="text/plain",
+    )
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8001)
+    app.run(host='localhost', port=8001)
