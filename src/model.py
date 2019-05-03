@@ -164,53 +164,56 @@ def model_nn(sess, input_image, num_iterations=10):
 
     return generated_image
 
-# Reset the graph
-tf.reset_default_graph()
+def run_model():
+    # Reset the graph
+    tf.reset_default_graph()
 
-# Start interactive session
-sess = tf.InteractiveSession()
+    # Start interactive session
+    sess = tf.InteractiveSession()
 
-content_image = imageio.imread("static/uploads/cat500x500.jpg")
-content_image = reshape_and_normalize_image(content_image)
+    content_image = imageio.imread("static/uploads/cat500x500.jpg")
+    content_image = reshape_and_normalize_image(content_image)
 
-style_image = imageio.imread("static/uploads/style500x500.jpg")
+    style_image = imageio.imread("static/uploads/style500x500.jpg")
 
-style_image = reshape_and_normalize_image(style_image)
+    style_image = reshape_and_normalize_image(style_image)
 
-generated_image = generate_noise_image(content_image)
+    generated_image = generate_noise_image(content_image)
 
-model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
+    model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
 
-# Assign the content image to be the input of the VGG model.
-sess.run(model['input'].assign(content_image))
+    # Assign the content image to be the input of the VGG model.
+    sess.run(model['input'].assign(content_image))
 
-# Select the output tensor of layer conv4_2
-out = model['conv4_2']
+    # Select the output tensor of layer conv4_2
+    out = model['conv4_2']
 
-# Set a_C to be the hidden layer activation from the layer we have selected
-a_C = sess.run(out)
+    # Set a_C to be the hidden layer activation from the layer we have selected
+    a_C = sess.run(out)
 
-# Set a_G to be the hidden layer activation from same layer. Here, a_G references model['conv4_2']
-# and isn't evaluated yet. Later in the code, we'll assign the image G as the model input, so that
-# when we run the session, this will be the activations drawn from the appropriate layer, with G as input.
-a_G = out
+    # Set a_G to be the hidden layer activation from same layer. Here, a_G references model['conv4_2']
+    # and isn't evaluated yet. Later in the code, we'll assign the image G as the model input, so that
+    # when we run the session, this will be the activations drawn from the appropriate layer, with G as input.
+    a_G = out
 
-# Compute the content cost
-J_content = compute_content_cost(a_C, a_G)
+    # Compute the content cost
+    J_content = compute_content_cost(a_C, a_G)
 
-# Assign the input of the model to be the "style" image
-sess.run(model['input'].assign(style_image))
+    # Assign the input of the model to be the "style" image
+    sess.run(model['input'].assign(style_image))
 
-# Compute the style cost
-J_style = compute_style_cost(model, STYLE_LAYERS)
+    # Compute the style cost
+    J_style = compute_style_cost(model, STYLE_LAYERS)
 
-# Compute the total cost
-J = total_cost(J_content, J_style)
+    # Compute the total cost
+    J = total_cost(J_content, J_style)
 
-# define optimizer (1 line)
-optimizer = tf.train.AdamOptimizer(2.0)
+    # define optimizer (1 line)
+    optimizer = tf.train.AdamOptimizer(2.0)
 
-# define train_step (1 line)
-train_step = optimizer.minimize(J)
+    # define train_step (1 line)
+    train_step = optimizer.minimize(J)
 
-model_nn(sess, generated_image, num_iterations=100)
+    model_nn(sess, generated_image, num_iterations=50)
+
+run_model()
