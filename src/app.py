@@ -43,7 +43,7 @@ style.label.place(x=400,rely=0.1)
 style.btn.place(x=500,y=450)
 
 def transfer():
-	#TODO: pass function in module model
+        #TODO: pass function in module model
 	# use content.img & style.img as 2 inputs
 	print("-----")
 
