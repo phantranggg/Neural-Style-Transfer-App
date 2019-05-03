@@ -1,6 +1,7 @@
 import imageio
 import tensorflow as tf
 from nst_utils import *
+from tensorflow.python.framework import ops
 
 def compute_content_cost(a_C, a_G):
     """
@@ -132,7 +133,7 @@ def total_cost(J_content, J_style, alpha=10, beta=40):
     return J
 
 def model_nn(sess, input_image, num_iterations=10):
-    PATH = "static/output/"
+    PATH = "src/static/output/"
 
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())
@@ -164,23 +165,22 @@ def model_nn(sess, input_image, num_iterations=10):
 
     return generated_image
 
-def run_model():
-    # Reset the graph
-    tf.reset_default_graph()
 
-    # Start interactive session
-    sess = tf.InteractiveSession()
 
-    content_image = imageio.imread("static/uploads/cat500x500.jpg")
+# Reset the graph
+ops.reset_default_graph()
+
+# Start interactive session
+with tf.Session() as sess:
+    content_image = imageio.imread("src/static/uploads/cat400x300.jpg")
     content_image = reshape_and_normalize_image(content_image)
 
-    style_image = imageio.imread("static/uploads/style500x500.jpg")
-
+    style_image = imageio.imread("src/static/uploads/style400x300.jpg")
     style_image = reshape_and_normalize_image(style_image)
 
     generated_image = generate_noise_image(content_image)
 
-    model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
+    model = load_vgg_model("src/pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
 
     # Assign the content image to be the input of the VGG model.
     sess.run(model['input'].assign(content_image))
@@ -215,5 +215,3 @@ def run_model():
     train_step = optimizer.minimize(J)
 
     model_nn(sess, generated_image, num_iterations=50)
-
-run_model()
