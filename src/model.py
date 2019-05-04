@@ -2,12 +2,17 @@ import imageio
 import tensorflow as tf
 from nst_utils import *
 from tensorflow.python.framework import ops
+import time
 
-# Reset the graph
-ops.reset_default_graph()
+sess = None
 
-# Start interactive session
-sess = tf.Session()
+def initSession():
+    global sess
+    # Reset the graph
+    ops.reset_default_graph()
+
+    # Start interactive session
+    sess = tf.Session()    
 
 def compute_content_cost(a_C, a_G):
     """
@@ -172,12 +177,17 @@ def model_nn(sess, input_image, num_iterations=10):
     return generated_image
 
 
-def run_model():
+def run_model(content_url, style_url):
+    # Start interactive session
+    initSession()
 
-    content_image = imageio.imread("src/static/uploads/cat400x300.jpg")
+    print(content_url)
+    print(style_url)
+
+    content_image = imageio.imread(content_url)
     content_image = reshape_and_normalize_image(content_image)
 
-    style_image = imageio.imread("src/static/uploads/style400x300.jpg")
+    style_image = imageio.imread(style_url)
     style_image = reshape_and_normalize_image(style_image)
 
     generated_image = generate_noise_image(content_image)
@@ -219,7 +229,8 @@ def run_model():
     # model_nn(sess, generated_image, num_iterations=50)
 
     PATH = "src/static/output/"
-    NUM_ITERATIONS = 50
+    STATIC_PATH = "static/output/"
+    NUM_ITERATIONS = 10
 
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())
@@ -247,6 +258,8 @@ def run_model():
             save_image(PATH + str(i) + ".png", generated_image)
 
     # save last generated image
-    save_image(PATH + "generated_image.jpg", generated_image)
+    file_name = str(time.time()) + '_' + "generated_image.jpg"
+    save_image(PATH + file_name, generated_image)
+    return STATIC_PATH + file_name
 
 # run_model()

@@ -1,83 +1,188 @@
 <html lang="en">
 <head>
     <title>Change image on select new image from file input</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-        <span class="btn btn-default btn-file">
-            Your image <input type="file" name="image" id="content-img">
-            <img id="content-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
-        </span>
-        <input type="submit" value="Upload your image" class="btn btn-primary">
-    </form>
-
-    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-        <span class="btn btn-default btn-file">
-            Your style <input type="file" name="image" id="style-img">
-            <img id="style-img-tag" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px"/>
-        </span>
-        <input type="submit" value="Upload your image" class="btn btn-primary">
-    </form>
-
-    <div>
-        Find your new image <button id="generate-img"></button>
-        <img id="result" src="{{url_for('static', filename='output/generated_image.jpg')}}" width="200px" />
+    <div class="container-fluid">
+        <form enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>Photo</h1>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="tab-pane fade in active">
+                            <a href="#photo" aria-controls="photo" role="tab" data-toggle="tab">Upload photo</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="photo">
+                            <div class="uploader text-center">
+                                <input type="file" name="content_img" id="contentImg" class="image img-input">
+                                <p class="uploader-msg">Drop a image file here or click to select one from your computer.</p>
+                                <img class="img-preview" style="display: none" width="200px"/>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="error" id="contentErr"><span class="text-danger">You must choose a photo</span></p>
+                </div>
+                <div class="col-md-6">
+                    <h1>Style</h1>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#popular-style" aria-controls="popular-style" role="tab" data-toggle="tab">Popular styles</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#upload-style" aria-controls="upload-style" role="tab" data-toggle="tab">Upload style</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="popular-style">
+                            <div class="style-img d-inline-block">
+                                <img class="style" src="{{ url_for('static', filename='styles/style500x500.jpg') }}" alt="">
+                                <div class="overlay"><img src="{{ url_for('static', filename='checkmark.png') }}" alt=""></div>
+                            </div>
+                            <div class="style-img d-inline-block">
+                                <img class="style" src="{{ url_for('static', filename='styles/style500x500.jpg') }}" alt="">
+                                <div class="overlay"><img src="{{ url_for('static', filename='checkmark.png') }}" alt=""></div>
+                            </div>
+                            <div class="style-img d-inline-block">
+                                <img class="style" src="{{ url_for('static', filename='styles/style500x500.jpg') }}" alt="">
+                                <div class="overlay"><img src="{{ url_for('static', filename='checkmark.png') }}" alt=""></div>
+                            </div>
+                            <div class="style-img d-inline-block">
+                                <img class="style" src="{{ url_for('static', filename='styles/style500x500.jpg') }}" alt="">
+                                <div class="overlay"><img src="{{ url_for('static', filename='checkmark.png') }}" alt=""></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="upload-style">
+                            <div class="uploader text-center">
+                                <input type="file" name="style_img" id="styleImg" class="image img-input">
+                                <p class="uploader-msg">Drop style image file here or click to select one from your computer.</p>
+                                <img class="img-preview" style="display: none" width="200px"/>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="error" id="styleErr"><span class="text-danger">You must choose a style</span></p>
+                </div>
+            </div>
+            <div class="row margin-top-50 text-center">
+                <button type="button" class="btn btn-primary" id="generate-img">Find your new image</button>
+                <br>
+                <div class="container ">
+                    <div class="error alert alert-danger">
+                        <p><strong>Opps!</strong> Some error occured, please try again</p>
+                    </div>
+                </div>
+                <div class="rs-preview">
+                    <img class="img-thumbnail" id="result" src="{{url_for('static', filename='no-image-icon.png')}}" />
+                    <div class="overlay">
+                        <div class="loading lds-dual-ring"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
-<script type="text/javascript">
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
 
-            reader.onload = function (e) {
-                console.log(input.nextSibling);
-                $('.profile-img-tag').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-    $(".profile-img").change(function(){
-        readURL(this);
-    });
+    <script type="text/javascript">
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
-    $(function() {
-        $('#generate-img').bind('click', function() {
-            $.getJSON($SCRIPT_ROOT + '/generate_image', {
-                content: $('input[name="content-image"]').val(),
-                style: $('input[name="style-image"]').val()
-            }, function(data) {
-                $("#result").show();
-            });
-            return false;
-        });
-     });
-
-    $("#generate-img").click(function(){
-
-        var fd = new FormData();
-        var content = $('.profile-img')[0].files[0];
-        fd.append('file',files);
-        var style = $('.profile-img')[1].files[0];
-
-        $.ajax({
-            url: 'upload.php',
-            type: 'post',
-            data: fd,
-            contentType: false,
-            processData: false,
-            success: function(response){
-                if(response != 0){
-                    $("#img").attr("src",response);
-                    $(".preview img").show(); // Display image element
-                }else{
-                    alert('file not uploaded');
+        $(document).ready(function() {
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $(input).siblings('.uploader-msg').hide();
+                        $(input).siblings('.img-preview').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
-            },
-        });
-    });
-</script>
-<script src="{{ url_for('static', filename='display.js') }}"></script>
+            }
+            $(".image").change(function(){
+                readURL(this);
+            });
+
+            let isUploadStyle = false;
+            let currentStyle = undefined;
+
+            $('.style-img').click(function () {
+                isUploadStyle = false;
+                if(currentStyle == this) {
+                    $(this).find('.overlay').hide();
+                    currentStyle = undefined;
+                } else {
+                    $(currentStyle).find('.overlay').hide();
+                    $(this).find('.overlay').show();
+                    currentStyle = this;
+                }
+            });
+
+            $('input#styleImg').click(function() {
+                isUploadStyle = true;
+            });
+
+            function validate(formData) {
+                let valid = true;
+                let contentErr = $('#contentErr');
+                let styleErr = $('#styleErr');
+
+                if(formData.get('content_img') == 'undefined') {
+                    contentErr.show();
+                    valid = false;
+                }
+
+                if(isUploadStyle) {
+                    if(formData.get('style_img') == 'undefined') {
+                        styleErr.show();
+                        valid = false;
+                    }
+                } else {
+                    if(!currentStyle || currentStyle == 'undefined')  {
+                        styleErr.show();
+                        valid = false;
+                    }
+                }
+
+                return valid;
+            }
+
+            $("#generate-img").click(function(){
+                var fd = new FormData();
+                var content = $('#contentImg')[0].files[0];
+                var style = $('#styleImg')[0].files[0];
+                fd.append('content_img', content);
+                fd.append('is_upload_style', isUploadStyle);
+                fd.append('style_img', style);
+                fd.append('style', currentStyle ? $(currentStyle).find('.style').attr('src') : null );
+                
+                $('.error').hide();
+                if(!validate(fd)) return;
+
+                $('.rs-preview .overlay').show();
+
+                $.ajax({
+                    url: 'upload',
+                    type: 'POST',
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    data: fd,
+                    success: function(response){
+                        $('#result').attr('src', response);
+                    },
+                    error: function(data) {
+                        $('error').show();
+                    },
+                    complete: function(data) {
+                        $('.rs-preview .overlay').hide();
+                    }
+                });
+            });
+        })
+    </script>
+    
 </body>
 </html>
