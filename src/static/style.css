@@ -94,3 +94,61 @@ h1 {
 .d-inline-block {
     display: inline-block;
 }
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 9px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rs-preview {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rs-preview .overlay,
+.rs-preview > img {
+    width: 100%;
+    height: 100%;
+}
+
+.rs-preview .overlay {
+    display: none;
+    background: rgba(200,200,200,0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.rs-preview .overlay .loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.error {
+    display: none;
+}

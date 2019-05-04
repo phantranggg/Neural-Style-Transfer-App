@@ -24,6 +24,7 @@
                             </div>
                         </div>
                     </div>
+                    <p class="error" id="contentErr"><span class="text-danger">You must choose a photo</span></p>
                 </div>
                 <div class="col-md-6">
                     <h1>Style</h1>
@@ -62,12 +63,23 @@
                             </div>
                         </div>
                     </div>
+                    <p class="error" id="styleErr"><span class="text-danger">You must choose a style</span></p>
                 </div>
             </div>
             <div class="row margin-top-50 text-center">
                 <button type="button" class="btn btn-primary" id="generate-img">Find your new image</button>
                 <br>
-                <img class="img-thumbnail margin-top-50" id="result" src="{{url_for('static', filename='no-image-icon.png')}}" width="200px" />
+                <div class="container ">
+                    <div class="error alert alert-danger">
+                        <p><strong>Opps!</strong> Some error occured, please try again</p>
+                    </div>
+                </div>
+                <div class="rs-preview">
+                    <img class="img-thumbnail" id="result" src="{{url_for('static', filename='no-image-icon.png')}}" />
+                    <div class="overlay">
+                        <div class="loading lds-dual-ring"></div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -94,7 +106,7 @@
             });
 
             let isUploadStyle = false;
-            let currentStyle;
+            let currentStyle = undefined;
 
             $('.style-img').click(function () {
                 isUploadStyle = false;
@@ -112,6 +124,31 @@
                 isUploadStyle = true;
             });
 
+            function validate(formData) {
+                let valid = true;
+                let contentErr = $('#contentErr');
+                let styleErr = $('#styleErr');
+
+                if(formData.get('content_img') == 'undefined') {
+                    contentErr.show();
+                    valid = false;
+                }
+
+                if(isUploadStyle) {
+                    if(formData.get('style_img') == 'undefined') {
+                        styleErr.show();
+                        valid = false;
+                    }
+                } else {
+                    if(!currentStyle || currentStyle == 'undefined')  {
+                        styleErr.show();
+                        valid = false;
+                    }
+                }
+
+                return valid;
+            }
+
             $("#generate-img").click(function(){
                 var fd = new FormData();
                 var content = $('#contentImg')[0].files[0];
@@ -120,6 +157,11 @@
                 fd.append('is_upload_style', isUploadStyle);
                 fd.append('style_img', style);
                 fd.append('style', currentStyle ? $(currentStyle).find('.style').attr('src') : null );
+                
+                $('.error').hide();
+                if(!validate(fd)) return;
+
+                $('.rs-preview .overlay').show();
 
                 $.ajax({
                     url: 'upload',
@@ -129,9 +171,14 @@
                     processData:false,
                     data: fd,
                     success: function(response){
-                        console.log(response);
                         $('#result').attr('src', response);
                     },
+                    error: function(data) {
+                        $('error').show();
+                    },
+                    complete: function(data) {
+                        $('.rs-preview .overlay').hide();
+                    }
                 });
             });
         })
