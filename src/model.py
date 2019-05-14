@@ -233,7 +233,7 @@ def run_model(content_url, style_url):
 
     PATH = "src/static/output/"
     STATIC_PATH = "static/output/"
-    NUM_ITERATIONS = 10
+    NUM_ITERATIONS = 200
 
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())
@@ -250,7 +250,7 @@ def run_model(content_url, style_url):
         generated_image = sess.run(model['input'])
 
         # Print every 20 iteration.
-        if i % 20 == 0:
+        if i % 25 == 0:
             Jt, Jc, Js = sess.run([J, J_content, J_style])
             print("Iteration " + str(i) + " :")
             print("total cost = " + str(Jt))
