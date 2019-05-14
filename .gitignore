@@ -3,3 +3,4 @@ __pycache__/
 pretrained-model
 venv/
 new_env/
+src/static/output/
