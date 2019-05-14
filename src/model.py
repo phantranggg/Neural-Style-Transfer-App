@@ -190,6 +190,9 @@ def run_model(content_url, style_url):
     style_image = imageio.imread(style_url)
     style_image = reshape_and_normalize_image(style_image)
 
+    print(content_image.shape)
+    print(style_image.shape)
+
     generated_image = generate_noise_image(content_image)
 
     model = load_vgg_model("src/pretrained-model/imagenet-vgg-verydeep-19.mat", content_image)
