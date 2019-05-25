@@ -4,3 +4,5 @@ pretrained-model
 venv/
 new_env/
 src/static/output/
+src/static/uploads/
+src/static/styles/
