@@ -264,5 +264,3 @@ def run_model(content_url, style_url):
     file_name = str(time.time()) + '_' + "generated_image.jpg"
     save_image(PATH + file_name, generated_image)
     return STATIC_PATH + file_name
-
-# run_model()

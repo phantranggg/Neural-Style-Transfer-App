@@ -84,8 +84,6 @@ def load_vgg_model(path, input_image):
         assert layer_name == expected_layer_name
         return W, b
 
-        return W, b
-
     def _relu(conv2d_layer):
         """
         Return the RELU function wrapped over a TensorFlow layer. Expects a
