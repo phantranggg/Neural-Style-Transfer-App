@@ -30,9 +30,9 @@ pip list
 
 Download pretrained model
 
-Save it in src/pretrained-model/imagenet-vg-g-verydeep-19.mat
 https://drive.google.com/file/d/1XQ2pTh7heTevGnUNkgeq5PxEGFfD1wPr/view?usp=sharing
 
+Save it in `src/pretrained-model/`
 
 ## Run model
 
@@ -45,6 +45,7 @@ python3 src/model.py
 ```bash
 python3 src/upload.py
 ```
+This command will start a development server at http://localhost:8001
 
 ## Deactivate
 
