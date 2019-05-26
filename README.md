@@ -6,6 +6,14 @@ To use this app, you need to upload 2 images, one is content image and other is 
 
 It will take a while to create a new image which is combined of input images.
 
+## Requirements
+
+- [virtualenv](https://virtualenv.pypa.io/en/latest/)
+
+- Python 3
+
+- pip
+
 ## Installation
 
 Create a virtual environment
