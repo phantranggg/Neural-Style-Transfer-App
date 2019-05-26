@@ -6,6 +6,14 @@ To use this app, you need to upload 2 images, one is content image and other is 
 
 It will take a while to create a new image which is combined of input images.
 
+## Requirements
+
+- [virtualenv](https://virtualenv.pypa.io/en/latest/)
+
+- Python 3
+
+- pip
+
 ## Installation
 
 Create a virtual environment
@@ -27,24 +35,18 @@ Show dependencies
 pip list
 ```
 
-
 Download pretrained model
 
-Save it in src/pretrained-model/imagenet-vg-g-verydeep-19.mat
 https://drive.google.com/file/d/1XQ2pTh7heTevGnUNkgeq5PxEGFfD1wPr/view?usp=sharing
 
-
-## Run model
-
-```bash
-python3 src/model.py
-```
+and save it in `src/pretrained-model/`
 
 ## Run flask app
 
 ```bash
 python3 src/upload.py
 ```
+This command will start a development server at http://localhost:8001
 
 ## Deactivate
 
