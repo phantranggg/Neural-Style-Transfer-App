@@ -125,7 +125,7 @@ def compute_style_cost(model, STYLE_LAYERS):
     return J_style
 
 
-def total_cost(J_content, J_style, alpha=10, beta=40):
+def total_cost(J_content, J_style, alpha=100, beta=40):
     """
     Computes the total cost function
 
@@ -233,7 +233,7 @@ def run_model(content_url, style_url):
 
     PATH = "src/static/output/"
     STATIC_PATH = "static/output/"
-    NUM_ITERATIONS = 200
+    NUM_ITERATIONS = 1000
 
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())

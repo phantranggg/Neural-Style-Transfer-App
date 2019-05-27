@@ -33,10 +33,10 @@ def upload_file():
         
     content_img = Image.open(cf)
     (content_w, content_h) = content_img.size
-    if content_h > content_w and content_h > 300:
+    if content_h >= content_w and content_h >= 300:
         content_w = (int)((content_w * 300) / content_h)
         content_h = 300
-    elif content_w > content_h and content_w > 300:
+    elif content_w >= content_h and content_w >= 300:
         content_h = (int)((content_h * 300) / content_w)
         content_w = 300
     
