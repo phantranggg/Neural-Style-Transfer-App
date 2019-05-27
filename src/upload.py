@@ -24,16 +24,25 @@ def upload_file():
     cf = os.path.join(app.config['UPLOAD_FOLDER'], str(time.time()) + '_' + content.filename)
     content.save(cf)
     content.close()
-
+    
     if cf[-3:] == 'png':
         im = Image.open(cf)
         rgb_im = im.convert('RGB')
         cf = cf[:-3] + 'jpg'
         rgb_im.save(cf)
+        
     content_img = Image.open(cf)
-    content_img = content_img.resize((WIDTH, HEIGHT), Image.ANTIALIAS)
+    (content_w, content_h) = content_img.size
+    if content_h > content_w and content_h > 300:
+        content_w = (int)((content_w * 300) / content_h)
+        content_h = 300
+    elif content_w > content_h and content_w > 300:
+        content_h = (int)((content_h * 300) / content_w)
+        content_w = 300
+    
+    content_img = content_img.resize((content_w, content_h), Image.ANTIALIAS)
     content_img.save(cf)
-
+    
     isUploadStyle = request.form.get('is_upload_style')
     if isUploadStyle == 'true':
         style = request.files['style_img']
@@ -48,7 +57,7 @@ def upload_file():
     else:
         sf = SRC_FOLDER + request.form.get('style')
     style_img = Image.open(sf)
-    style_img = style_img.resize((WIDTH, HEIGHT), Image.ANTIALIAS)
+    style_img = style_img.resize(content_img.size, Image.ANTIALIAS)
     style_img.save(sf)
 
 
