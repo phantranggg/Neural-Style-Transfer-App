@@ -121,15 +121,13 @@ h1 {
 }
 
 .rs-preview {
-    width: 200px;
-    height: 200px;
+    max-width: 500px;
     position: relative;
     margin-left: auto;
     margin-right: auto;
 }
 
-.rs-preview .overlay,
-.rs-preview > img {
+.rs-preview .overlay {
     width: 100%;
     height: 100%;
 }
