@@ -233,7 +233,7 @@ def run_model(content_url, style_url):
 
     PATH = "src/static/output/"
     STATIC_PATH = "static/output/"
-    NUM_ITERATIONS = 10
+    NUM_ITERATIONS = 200
 
     # Initialize global variables (you need to run the session on the initializer)
     sess.run(tf.global_variables_initializer())
